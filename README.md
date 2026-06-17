@@ -25,6 +25,8 @@ The production stack recommended for this application is built entirely on Micro
 - **Session & History Storage**: **Azure Cosmos DB (SQL/NoSQL API)**.
 - **Infrastructure as Code**: **Terraform** for repeatable configurations.
 
+![Azure Production Architecture](images/architecture.png)
+
 ---
 
 ## 3. Local Development Setup
