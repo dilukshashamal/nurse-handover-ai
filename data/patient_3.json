@@ -1,0 +1,230 @@
+{
+  "resourceType": "Bundle",
+  "id": "patient-bundle-3",
+  "type": "collection",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "pat-003",
+        "name": [
+          {
+            "use": "official",
+            "family": "Vance",
+            "given": ["Marcus", "A."]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1954-08-22",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "555-0322",
+            "use": "home"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-4",
+        "subject": { "reference": "Patient/pat-003" },
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10",
+              "code": "J44.1",
+              "display": "Chronic Obstructive Pulmonary Disease with Acute Exacerbation"
+            }
+          ]
+        },
+        "clinicalStatus": "active"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "alg-3",
+        "patient": { "reference": "Patient/pat-003" },
+        "substance": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "294464000",
+              "display": "Aspirin"
+            }
+          ]
+        },
+        "criticality": "medium",
+        "verificationStatus": "confirmed"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-vitals-3-1",
+        "subject": { "reference": "Patient/pat-003" },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "85354-9",
+              "display": "Blood Pressure"
+            }
+          ]
+        },
+        "component": [
+          {
+            "code": { "coding": [{ "code": "8480-6", "display": "Systolic" }] },
+            "valueQuantity": { "value": 128, "unit": "mmHg" }
+          },
+          {
+            "code": { "coding": [{ "code": "8462-4", "display": "Diastolic" }] },
+            "valueQuantity": { "value": 76, "unit": "mmHg" }
+          }
+        ],
+        "effectiveDateTime": "2026-06-17T16:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-vitals-3-2",
+        "subject": { "reference": "Patient/pat-003" },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8867-4",
+              "display": "Heart Rate"
+            }
+          ]
+        },
+        "valueQuantity": { "value": 88, "unit": "bpm" },
+        "effectiveDateTime": "2026-06-17T16:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-vitals-3-3",
+        "subject": { "reference": "Patient/pat-003" },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2708-6",
+              "display": "Oxygen Saturation"
+            }
+          ]
+        },
+        "valueQuantity": { "value": 94, "unit": "%" },
+        "effectiveDateTime": "2026-06-17T16:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "med-3-1",
+        "subject": { "reference": "Patient/pat-003" },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "3498",
+              "display": "Albuterol 2.5mg/3ml Inhalation Solution"
+            }
+          ]
+        },
+        "dosageInstruction": [
+          {
+            "text": "Every 4 hours via nebulizer as needed for wheezing",
+            "route": { "coding": [{ "display": "Inhalation" }] }
+          }
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "med-3-2",
+        "subject": { "reference": "Patient/pat-003" },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "8640",
+              "display": "Methylprednisolone Sodium Succinate 40mg Injection"
+            }
+          ]
+        },
+        "dosageInstruction": [
+          {
+            "text": "IV push daily in the morning",
+            "route": { "coding": [{ "display": "Intravenous" }] }
+          }
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "doc-nursing-note-3",
+        "subject": { "reference": "Patient/pat-003" },
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11506-3",
+              "display": "Nursing Progress Note"
+            }
+          ]
+        },
+        "date": "2026-06-17T17:00:00Z",
+        "description": "Shift Progress Note - Day Shift",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "data": "TWFyY3VzIFZhbmNlIGlzIGEgNzIteWVhci1vbGQgbWFsZSwgYWRtaXR0ZWQgd2l0aCBhbiBhY3V0ZSBDT1BEIGV4YWNlcmJhdGlvbiBzZWNvbmRhcnkgdG8gYSBtaWxkIHVwcGVyIHJlc3BpcmF0b3J5IGluZmVjdGlvbi4gQ3VycmVudGx5IG9uIDNMIE8yIHZpYSBuYXNhbCBjYW5udWxhLCBTcE8yIHN0YWJsZSBhdCA5NCUuIFByb2R1Y3RpdmUgY291Z2ggbm90ZWQgd2l0aCB0aGljayB3aGl0ZSBzcHV0dW0uIFdoZWV6aW5nIGhlYXJkIGluIGFsbCBsdW5nIGZpZWxkcywgYnV0IGRlY3JlYXNlZCBjb21wYXJlZCB0byBhZG1pc3Npb24uIE5lYnVsaXplciB0cmVhdG1lbnRzIChBbGJ1dGVyb2wgKyBJcHJhdHJvcGl1bSkgYWRtaW5pc3RlcmVkIGF0IDEwMDAgYW5kIDE0MDAgd2l0aCBnb29kIHJlc3BvbnNlIC0gcGF0aWVudCByZXBvcnRzIGJyZWF0aGluZyBpcyAnZWFzaWVyJy4gU29sdS1NZWRyb2wgNDBtZyBJViBnaXZlbiBhdCAwOTAwLiBQYXRpZW50IHdhcyBhYmxlIHRvIGFtYnVsYXRlIHRvIHRoZSBiYXRocm9vbSBvbmNlIHdpdGggYXNzaXN0IG9mIDEuIE1pbGQgc2hvcnRuZXNzIG9mIGJyYXRoIGvciBleGVydGlvbiwgcmVjb3ZlcmVkIHF1aWNrbHkuIFZpdGFscyBhcmUgc3RhYmxlOiBCUCAxMjgvNzYsIEhSIDg4LCBUZW1wIDM3LjEgQy4gT3BlbiBxdWVzdGlvbjogY29udGludWUgdG8gYXNzZXNzIGx1bmcgc291bmRzIGFuZCBtb25pdG9yIHJlc3BvbnNlIHRvIG5leHQgbmViIHRyZWF0bWVudCBzY2hlZHVsZWQgZm9yIDE4MDAuIFRyeSB0byB3ZWFuIG94eWdlbiBkb3duIHRvIDJMIGlmIHBhdGllbnQgdG9sZXJhdGVzLg==",
+              "title": "Nursing Progress Note - marcus_vance_shift_note.txt"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,238 @@
+{
+  "resourceType": "Bundle",
+  "id": "patient-bundle-2",
+  "type": "collection",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "pat-002",
+        "name": [
+          {
+            "use": "official",
+            "family": "Chen",
+            "given": ["Elena", "M."]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1994-11-05",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "555-0211",
+            "use": "home"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-3",
+        "subject": { "reference": "Patient/pat-002" },
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10",
+              "code": "E10.10",
+              "display": "Type 1 Diabetes Mellitus with Ketoacidosis"
+            }
+          ]
+        },
+        "clinicalStatus": "active"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "alg-2",
+        "patient": { "reference": "Patient/pat-002" },
+        "substance": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "293586001",
+              "display": "Sulfa Drugs"
+            }
+          ]
+        },
+        "criticality": "medium",
+        "verificationStatus": "confirmed"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-vitals-2-1",
+        "subject": { "reference": "Patient/pat-002" },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "85354-9",
+              "display": "Blood Pressure"
+            }
+          ]
+        },
+        "component": [
+          {
+            "code": { "coding": [{ "code": "8480-6", "display": "Systolic" }] },
+            "valueQuantity": { "value": 112, "unit": "mmHg" }
+          },
+          {
+            "code": { "coding": [{ "code": "8462-4", "display": "Diastolic" }] },
+            "valueQuantity": { "value": 70, "unit": "mmHg" }
+          }
+        ],
+        "effectiveDateTime": "2026-06-17T16:30:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-vitals-2-2",
+        "subject": { "reference": "Patient/pat-002" },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8867-4",
+              "display": "Heart Rate"
+            }
+          ]
+        },
+        "valueQuantity": { "value": 104, "unit": "bpm" },
+        "effectiveDateTime": "2026-06-17T16:30:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-labs-2-1",
+        "subject": { "reference": "Patient/pat-002" },
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2339-0",
+              "display": "Glucose [Mass/volume] in Blood"
+            }
+          ]
+        },
+        "valueQuantity": { "value": 210, "unit": "mg/dL" },
+        "effectiveDateTime": "2026-06-17T16:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-labs-2-2",
+        "subject": { "reference": "Patient/pat-002" },
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "20505-4",
+              "display": "pH of Arterial Blood"
+            }
+          ]
+        },
+        "valueQuantity": { "value": 7.28, "unit": "pH" },
+        "effectiveDateTime": "2026-06-17T15:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "med-2-1",
+        "subject": { "reference": "Patient/pat-002" },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "311036",
+              "display": "Regular Insulin 100 UNT/ML Infusion"
+            }
+          ]
+        },
+        "dosageInstruction": [
+          {
+            "text": "Continuous IV infusion at 4 units/hour, adjust per DKA protocol",
+            "route": { "coding": [{ "display": "Intravenous" }] }
+          }
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "med-2-2",
+        "subject": { "reference": "Patient/pat-002" },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "312450",
+              "display": "0.45% Sodium Chloride with 20 mEq Potassium Chloride"
+            }
+          ]
+        },
+        "dosageInstruction": [
+          {
+            "text": "IV continuous infusion at 150 mL/hour",
+            "route": { "coding": [{ "display": "Intravenous" }] }
+          }
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "doc-nursing-note-2",
+        "subject": { "reference": "Patient/pat-002" },
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11506-3",
+              "display": "Nursing Progress Note"
+            }
+          ]
+        },
+        "date": "2026-06-17T17:00:00Z",
+        "description": "Shift Progress Note - Day Shift",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "data": "RWxlbmEgQ2hlbiBpcyBhIDMxLXllYXItb2xkIGZlbWFsZSwgYWRtaXR0ZWQgeWVzdGVyZGF5IGZvciBEaWFiZXRpYyBLZXRvYWNpZG9zaXMgKERLQSkuIE1ldGFib2xpYyBzdGF0dXMgaXMgZ3JhZHVhbGx5IGltcHJvdmluZy4gQXJ0ZXJpYWwgcEggdXAgZnJvbSA3LjE1IGF0IGFkbWlzc2lvbiB0byA3LjI4IGFzIG9mIDE1MDAuIEJsb29kIGdsdWNvc2Ugb24gc2hpZnQgc3RhcnQgd2FzIDMyMCBtZy9kTCwgbm93IGRvd24gdG8gMjEwIG1nL2RMLCBjaGVja2VkIGhvdXJseS4gQ29udGludW91cyBJbnN1bGluIGRyZXNzaW5nIGF0IDQgdW5pdHMvaHIgdmlhIGluZnVzaW9uIHB1bXAuIFBhdGllbnQgY29tcGxhaW5lZCBvZiBtaWxkIG5hdXNlYSBhdCAxMTAwOyBhZG1pbmlzdGVyZWQgT25kYW5zZXRyb24gNG1nIElQIHdpdGggZ29vZCByZWxpZWYuIEVsZWN0cm9seXRlcyBtb25pdG9yZWQgY2xvc2VseTsgUG90YXNzaXVtIGxldmVsIGlzIDQuMCBtRXEvTCwgdmlhIG1haW50ZW5hbmNlIElWIDAuNDUlIE5TICsgMjBtRXEgS0NsIHJ1bm5pbmcgYXQgMTUwbWwvaHIuIE91dHB1dCBpcyBhZGVxdWF0ZSwgYXZlcmFnaW5nIDkwbWwvaHIuIFBhdGllbnQgaXMgYWxlcnQsIGNvb3BlcmF0aXZlLCBidXQgcmVwb3J0cyBmYXRpZ3VlIGFuZCBkcnkgbW91dGguIE9yYWwgaHlkcmF0aW9uIGVuY291cmFnZWQgYnV0IGxpbWl0ZWQgdG8gc2lwcy4gT3BlbiBxdWVzdGlvbjogY29udGludWUgaG91cmx5IGdsdWNvc2UgY2hlY2tzLCBhbmQgYWxlcnQgUEggaWYgZ2x1Y29zZSBkcm9wcyBiZWxvdyAxNTAgbWcvZEwgc3VjaCB0aGF0IHdlIG5lZWQgdG8gc3dpdGNoIHRvIEQ1UyArIDAuNDUlIE5TIHBlciBES0EgaGFuZG91dC4gTmV4dCBibG9vZCBnYXMgKEFCRykgZHVlIGF0IDE5MDAu",
+              "title": "Nursing Progress Note - elena_chen_shift_note.txt"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

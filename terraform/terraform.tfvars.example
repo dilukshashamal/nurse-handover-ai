@@ -1,0 +1,13 @@
+# Project Configuration
+project_name = "nurse-handover"
+environment  = "dev"
+
+# Azure Region (make sure the region supports Azure OpenAI, Cosmos DB and Healthcare APIs)
+location = "eastus"
+
+# App Service Configuration
+app_service_plan_sku = "B1"
+
+# Azure OpenAI Configuration
+openai_model_name    = "gpt-4o"
+openai_model_version = "2024-05-13"

@@ -1,0 +1,275 @@
+{
+  "resourceType": "Bundle",
+  "id": "patient-bundle-1",
+  "type": "collection",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "pat-001",
+        "name": [
+          {
+            "use": "official",
+            "family": "Sterling",
+            "given": ["Robert", "J."]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1960-04-12",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "555-0199",
+            "use": "home"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-1",
+        "subject": { "reference": "Patient/pat-001" },
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10",
+              "code": "Z98.61",
+              "display": "Coronary Artery Bypass Graft (CABG) Post-Op Day 2"
+            }
+          ]
+        },
+        "clinicalStatus": "active"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-2",
+        "subject": { "reference": "Patient/pat-001" },
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10",
+              "code": "I10",
+              "display": "Essential Hypertension"
+            }
+          ]
+        },
+        "clinicalStatus": "active"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "alg-1",
+        "patient": { "reference": "Patient/pat-001" },
+        "substance": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "373270004",
+              "display": "Penicillin"
+            }
+          ]
+        },
+        "criticality": "high",
+        "verificationStatus": "confirmed"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-vitals-1",
+        "subject": { "reference": "Patient/pat-001" },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "85354-9",
+              "display": "Blood Pressure"
+            }
+          ]
+        },
+        "component": [
+          {
+            "code": { "coding": [{ "code": "8480-6", "display": "Systolic" }] },
+            "valueQuantity": { "value": 134, "unit": "mmHg" }
+          },
+          {
+            "code": { "coding": [{ "code": "8462-4", "display": "Diastolic" }] },
+            "valueQuantity": { "value": 82, "unit": "mmHg" }
+          }
+        ],
+        "effectiveDateTime": "2026-06-17T16:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-vitals-2",
+        "subject": { "reference": "Patient/pat-001" },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8867-4",
+              "display": "Heart Rate"
+            }
+          ]
+        },
+        "valueQuantity": { "value": 92, "unit": "bpm" },
+        "effectiveDateTime": "2026-06-17T16:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-vitals-3",
+        "subject": { "reference": "Patient/pat-001" },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2708-6",
+              "display": "Oxygen Saturation"
+            }
+          ]
+        },
+        "valueQuantity": { "value": 96, "unit": "%" },
+        "effectiveDateTime": "2026-06-17T16:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-vitals-4",
+        "subject": { "reference": "Patient/pat-001" },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8310-5",
+              "display": "Body Temperature"
+            }
+          ]
+        },
+        "valueQuantity": { "value": 37.4, "unit": "C" },
+        "effectiveDateTime": "2026-06-17T16:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "med-1",
+        "subject": { "reference": "Patient/pat-001" },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "329528",
+              "display": "Metoprolol succinate 50mg Extended Release Tablet"
+            }
+          ]
+        },
+        "dosageInstruction": [
+          {
+            "text": "Take 1 tablet daily by mouth in the morning",
+            "route": { "coding": [{ "display": "Oral" }] }
+          }
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "med-2",
+        "subject": { "reference": "Patient/pat-001" },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "35827",
+              "display": "Oxycodone 5mg Oral Tablet"
+            }
+          ]
+        },
+        "dosageInstruction": [
+          {
+            "text": "1 tablet every 4 hours as needed for moderate pain",
+            "route": { "coding": [{ "display": "Oral" }] }
+          }
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "doc-nursing-note-1",
+        "subject": { "reference": "Patient/pat-001" },
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11506-3",
+              "display": "Nursing Progress Note"
+            }
+          ]
+        },
+        "date": "2026-06-17T17:00:00Z",
+        "description": "Shift Progress Note - Day Shift",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "data": "U3RhcnQgb2Ygc2hpZnQ6IFBhdGllbnQgUm9iZXJ0IFN0ZXJsaW5nIGlzIGEgNjYteWVhci1vbGQgbWFsZSwgUG9zdC1PcCBEYXkgMiBmcm9tIGEgMy12ZXNzZWwgQ0FCRy4gUGF0aWVudCB3b2tlIHVwIHJlcG9ydGluZyBzdGVybmFsIHBhaW4gYXQgNi8xMCwgbW9kZXJhdGUsIGR1bGwuIEFkbWluaXN0ZXJlZCBPeHljb2RvbmUgNW1nIGF0IDA4MDAgd2l0aCBnb29kIGVmZmVjdDsgcGFpbiByZWR1Y2VkIHRvIDIvMTAuIFN0ZXJuYWwgaW5jaXNpb24gZHJ5LCBpbnRhY3QsIHdpdGggYmFuZGFnZXMgc2hvd2luZyBubyBhY3RpdmUgYmxlZWRpbmcgb3IgcHVydWxlbnQgZHJhaW5hZ2UuIE1pbGQgc2Vyby1zYW5ndWluZW91cyBvdXRwdXQgZnJvbSBib3RoIGNoZXN0IHR1YmVzLCB0b3RhbGluZyA0MG1sIGZvciB0aGUgZW50aXJlIDgtaG91ciBzaGlmdC4gUGF0aWVudCBoYWQgbmV3IG9uc2V0IG9mIHRhY2h5Y2FyZGlhIGF0IDEzMDAgd2l0aCBoZWFydCByYXRlIGZsdWN0dWF0aW5nIGJldHdlZW4gOTVzcCBhbmQgMTEwc3A7IEVLRyBzaG93ZWQgU2ludXMgVGFjaHljYXJkaWEsIG5vIEFmaWIgcHJlc2VudC4gTWV0b3Byb2xvbCBhZG1pbmlzdGVyZWQgYXMgc2NoZWR1bGVkLiBMdW5ncyBjbGVhciB0byBhdXNjdWx0YXRpb24gYmlsYXRlcmFsbHksIGJ1dCBiYXNhbCBicmVhdGggc291bmRzIGFyZSBtaWxkbHkgZGVjcmVhc2VkLiBQYXRpZW50IGVuY291cmFnZWQgdG8gdXNlIEludGVudGl2ZSBTcGlyb21ldGVyIChJUykgZXZlcnkgaG91ciwgY291Z2hpbmcgYW5kIGRlZXAgYnJlYXRoaW5nLiBBbWJ1bGF0ZWQgZG93biB0aGUgaGFsbHdheSB0d2ljZSBmb3IgNTBmdCB3aXRoIHBoeXNpY2FsIHRoZXJhcHksIHRvbGVyYXRlZCB3ZWxsIGJ1dCByZXF1aXJlZCAyTCBPMiB2aWEgbmFzYWwgY2FubnVsYSB0byBtYWludGFpbiBTcE8yIGFib3ZlIDk1JS4gU3BPMiBkcm9wcGVkIHRvIDkxJSBvbiByb29tIGFpci4gT3BlbiBxdWVzdGlvbiBmb3IgbmV4dCBzaGlmdDoga2VlcCBleHRyYSBleWVzIG9uIHRlbGVtZXRyeSBmb3IgYW55IGZ1cnRoZXIgdGFjaHljYXJkaWEsIGFuZCBlbmNvdXJhZ2Ugd2VhbmxpbmcgZnJvbSAyTCBPMiBpZiBTcE8yIHN0YWJpbGl6ZXMu",
+              "title": "Nursing Progress Note - robert_sterling_shift_note.txt"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
