@@ -23,6 +23,6 @@ class Settings:
 
     @property
     def has_azure_creds(self) -> bool:
-        return bool(self.AZURE_OPENAI_API_KEY and self.AZURE_OPENAI_ENDPOINT)
+        return bool(self.AZURE_OPENAI_ENDPOINT)
 
 settings = Settings()

@@ -1,11 +1,17 @@
 import json
 import logging
 from typing import Dict, Any
-from openai import AzureOpenAI
-from backend.app.config import settings
-from backend.app.prompts import SBAR_SYSTEM_PROMPT, SBAR_USER_TEMPLATE
+from openai import OpenAI, AzureOpenAI
+from app.config import settings
+from app.prompts import SBAR_SYSTEM_PROMPT, SBAR_USER_TEMPLATE
 
 logger = logging.getLogger(__name__)
+
+try:
+    from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+    HAS_AZURE_IDENTITY = True
+except ImportError:
+    HAS_AZURE_IDENTITY = False
 
 def generate_mock_sbar(patient_id: str, name: str) -> Dict[str, Any]:
     """Generates high-quality clinical SBAR mocks based on synthetic patient ID for offline mode."""
@@ -99,11 +105,34 @@ def generate_sbar_summary(patient_data: Dict[str, Any]) -> Dict[str, Any]:
             shift_note=shift_note_str
         )
 
-        client = AzureOpenAI(
-            api_key=settings.AZURE_OPENAI_API_KEY,
-            api_version=settings.AZURE_OPENAI_API_VERSION,
-            azure_endpoint=settings.AZURE_OPENAI_ENDPOINT
-        )
+        # Setup client based on authentication method: API Key vs Entra ID
+        if settings.AZURE_OPENAI_API_KEY:
+            logger.info("Initializing Azure OpenAI client using API Key.")
+            client = AzureOpenAI(
+                api_key=settings.AZURE_OPENAI_API_KEY,
+                api_version=settings.AZURE_OPENAI_API_VERSION,
+                azure_endpoint=settings.AZURE_OPENAI_ENDPOINT
+            )
+        elif HAS_AZURE_IDENTITY:
+            logger.info("AZURE_OPENAI_API_KEY is empty. Initializing OpenAI/AzureOpenAI client using Entra ID token provider.")
+            is_gateway = "/openai/v1" in settings.AZURE_OPENAI_ENDPOINT
+            scope = "https://ai.azure.com/.default" if is_gateway else "https://cognitiveservices.azure.com/.default"
+            
+            token_provider = get_bearer_token_provider(DefaultAzureCredential(), scope)
+            
+            if is_gateway:
+                client = OpenAI(
+                    base_url=settings.AZURE_OPENAI_ENDPOINT,
+                    api_key=token_provider()
+                )
+            else:
+                client = AzureOpenAI(
+                    azure_ad_token_provider=token_provider,
+                    api_version=settings.AZURE_OPENAI_API_VERSION,
+                    azure_endpoint=settings.AZURE_OPENAI_ENDPOINT
+                )
+        else:
+            raise ValueError("No API key provided and azure-identity package is not installed.")
 
         response = client.chat.completions.create(
             model=settings.AZURE_OPENAI_DEPLOYMENT_NAME,

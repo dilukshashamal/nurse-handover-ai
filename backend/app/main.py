@@ -5,10 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, Any, List
 
-from backend.app.config import settings
-from backend.app.fhir_parser import parse_patient_bundle
-from backend.app.llm_service import generate_sbar_summary
-from backend.app import mock_data
+from app.config import settings
+from app.fhir_parser import parse_patient_bundle
+from app.llm_service import generate_sbar_summary
+from app import mock_data
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)

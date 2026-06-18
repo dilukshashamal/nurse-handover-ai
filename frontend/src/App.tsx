@@ -5,11 +5,14 @@ import { PatientEhrPanel } from './components/PatientEhrPanel';
 import type { PatientEhrData } from './components/PatientEhrPanel';
 import { SbarSummaryPanel } from './components/SbarSummaryPanel';
 import type { SbarContent, HandoverLog } from './components/SbarSummaryPanel';
+import { useTheme } from './hooks/useTheme';
+import { Stethoscope, Sun, Moon, RefreshCw } from 'lucide-react';
 
 // Read API URL from Vite env or fallback to local port 8000
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function App() {
+  const { theme, toggleTheme } = useTheme();
   const [patients, setPatients] = useState<PatientSummary[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   
@@ -26,22 +29,6 @@ function App() {
   // Connection Error State
   const [apiError, setApiError] = useState<string | null>(null);
 
-  // Load Patient List on startup
-  useEffect(() => {
-    fetchPatients();
-  }, []);
-
-  // Load patient details whenever the selected patient changes
-  useEffect(() => {
-    if (selectedPatientId) {
-      loadPatientDetails(selectedPatientId);
-    } else {
-      setPatientData(null);
-      setSbarDraft(null);
-      setHistory([]);
-    }
-  }, [selectedPatientId]);
-
   const fetchPatients = async () => {
     try {
       setLoadingPatients(true);
@@ -55,8 +42,9 @@ function App() {
       if (data.length > 0 && !selectedPatientId) {
         setSelectedPatientId(data[0].id);
       }
-    } catch (e: any) {
-      setApiError(`Backend connection failed. Make sure the FastAPI server is running at ${API_URL}. Details: ${e.message}`);
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Unknown error occurred';
+      setApiError(`Backend connection failed. Make sure the FastAPI server is running at ${API_URL}. Details: ${errorMessage}`);
     } finally {
       setLoadingPatients(false);
     }
@@ -85,13 +73,32 @@ function App() {
         const draftData = await draftRes.json();
         setSbarDraft(draftData.sbar);
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error(e);
-      alert(`Error loading patient records: ${e.message}`);
+      const errorMessage = e instanceof Error ? e.message : 'Unknown error occurred';
+      alert(`Error loading patient records: ${errorMessage}`);
     } finally {
       setLoadingDetails(false);
     }
   };
+
+  // Load Patient List on startup
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchPatients();
+  }, []);
+
+  // Load patient details whenever the selected patient changes
+  useEffect(() => {
+    if (selectedPatientId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      loadPatientDetails(selectedPatientId);
+    } else {
+      setPatientData(null);
+      setSbarDraft(null);
+      setHistory([]);
+    }
+  }, [selectedPatientId]);
 
   const handleGenerateSbar = async () => {
     if (!selectedPatientId) return;
@@ -103,8 +110,9 @@ function App() {
       if (!res.ok) throw new Error("AI Summarization failed.");
       const sbarData = await res.json();
       setSbarDraft(sbarData);
-    } catch (e: any) {
-      alert(`AI summary generation failed: ${e.message}`);
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Unknown error occurred';
+      alert(`AI summary generation failed: ${errorMessage}`);
     } finally {
       setGeneratingSbar(false);
     }
@@ -141,8 +149,9 @@ function App() {
       await loadPatientDetails(selectedPatientId);
       
       alert(`Handover signed and logged successfully by RN ${nurseName}.`);
-    } catch (e: any) {
-      alert(`Failed to approve handover: ${e.message}`);
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Unknown error occurred';
+      alert(`Failed to approve handover: ${errorMessage}`);
     } finally {
       setApprovingHandover(false);
     }
@@ -150,27 +159,48 @@ function App() {
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Skip Navigation Link for Accessibility */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      
       <header className="app-header">
         <div className="app-title">
-          <span className="app-logo">🩺</span> Clinical Handoff Assistant
+          <Stethoscope className="app-logo" size={24} /> Clinical Handoff Assistant
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
             EHR Integration: <span style={{ color: 'var(--accent-emerald)', fontWeight: 600 }}>Active (Synthetic FHIR)</span>
           </span>
-          <button className="btn btn-secondary" onClick={fetchPatients} style={{ padding: '0.5rem 0.75rem' }}>
-            🔄 Refresh
+          <button 
+            className="btn btn-secondary" 
+            onClick={toggleTheme}
+            style={{ padding: '0.5rem 0.75rem' }}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          <button 
+            className="btn btn-secondary" 
+            onClick={fetchPatients} 
+            style={{ padding: '0.5rem 0.75rem' }}
+            aria-label="Refresh patient list"
+          >
+            <RefreshCw size={18} /> Refresh
           </button>
         </div>
       </header>
 
       {apiError && (
-        <div style={{ background: 'rgba(244, 63, 94, 0.15)', borderBottom: '1px solid rgba(244, 63, 94, 0.3)', color: 'var(--accent-rose)', padding: '0.75rem 2rem', fontSize: '0.9rem', textAlign: 'center' }}>
+        <div 
+          role="alert" 
+          style={{ background: 'rgba(244, 63, 94, 0.15)', borderBottom: '1px solid rgba(244, 63, 94, 0.3)', color: 'var(--accent-rose)', padding: '0.75rem 2rem', fontSize: '0.9rem', textAlign: 'center' }}
+        >
           ⚠️ {apiError}
         </div>
       )}
 
-      <main className="dashboard-container">
+      <main id="main-content" className="dashboard-container">
         <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '1.5rem', flex: 1, minHeight: 0 }}>
           {/* Left panel: Census Board */}
           <PatientSelector

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Zap, Sparkles, Rocket, AlertTriangle, CheckSquare, ScrollText } from 'lucide-react';
 
 export interface SbarContent {
   situation: string;
@@ -36,11 +37,13 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
   isApproving,
   history
 }) => {
-  const [editedSbar, setEditedSbar] = useState<SbarContent | null>(null);
   const [nurseSignature, setNurseSignature] = useState('');
   const [localSaving, setLocalSaving] = useState(false);
 
-  // Sync state with prop updates
+  // Initialize editedSbar with sbar prop
+  const [editedSbar, setEditedSbar] = useState<SbarContent | null>(sbar);
+  
+  // Update editedSbar when sbar prop changes
   useEffect(() => {
     setEditedSbar(sbar);
   }, [sbar]);
@@ -95,26 +98,26 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
   };
 
   return (
-    <div className="glass-panel panel-container" style={{ position: 'relative' }}>
+    <div className="card-panel panel-container" style={{ position: 'relative' }}>
       {isGenerating && (
-        <div className="loading-overlay">
-          <div className="spinner"></div>
-          <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--accent-cyan)' }}>Generating AI SBAR Summary</h3>
+        <div className="loading-overlay" role="status" aria-live="polite">
+          <div className="spinner" aria-hidden="true"></div>
+          <h3 style={{ fontWeight: 600, color: 'var(--accent-primary)' }}>Generating AI SBAR Summary</h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Analyzing progress notes and clinical data...</p>
         </div>
       )}
 
       <div className="panel-header">
         <div>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ color: 'var(--accent-cyan)' }}>⚡</span> AI-Assisted Shift Summary
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
+            <Zap color="var(--accent-primary)" size={20} /> AI-Assisted Shift Summary
           </h2>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>
             Drafting for MRN: {patientId}
           </div>
         </div>
         {localSaving && (
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontStyle: 'italic' }} aria-live="polite">
             Saving draft...
           </span>
         )}
@@ -123,13 +126,17 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
       <div className="panel-body">
         {!editedSbar ? (
           <div style={{ margin: 'auto', textAlign: 'center', padding: '2rem' }}>
-            <span style={{ fontSize: '3.5rem', marginBottom: '1rem', display: 'block', animation: 'pulse-glow 2s infinite alternate' }}>✨</span>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 600 }}>Create Shift Handoff</h3>
+            <Sparkles size={48} color="var(--accent-primary)" style={{ margin: '0 auto 1rem' }} />
+            <h3 style={{ fontWeight: 600 }}>Create Shift Handoff</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.5rem', marginBottom: '1.5rem', maxWidth: '350px', marginLeft: 'auto', marginRight: 'auto' }}>
               Compile EHR charts and generate a structured SBAR handoff report in seconds using Azure OpenAI.
             </p>
-            <button className="btn btn-primary" onClick={onGenerate}>
-              🚀 Generate SBAR Handoff
+            <button 
+              className="btn btn-primary" 
+              onClick={onGenerate}
+              aria-label="Generate SBAR handoff report"
+            >
+              <Rocket size={18} /> Generate SBAR Handoff
             </button>
           </div>
         ) : (
@@ -139,7 +146,7 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
               
               {/* Situation */}
               <div className="sbar-section sbar-s">
-                <div className="sbar-title" style={{ color: 'var(--accent-cyan)' }}>
+                <div className="sbar-title" style={{ color: 'var(--accent-primary)' }}>
                   <span>S</span> Situation
                 </div>
                 <textarea
@@ -147,6 +154,7 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
                   rows={2}
                   value={editedSbar.situation}
                   onChange={(e) => handleFieldChange('situation', e.target.value)}
+                  aria-label="Situation description"
                 />
               </div>
 
@@ -160,6 +168,7 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
                   rows={3}
                   value={editedSbar.background}
                   onChange={(e) => handleFieldChange('background', e.target.value)}
+                  aria-label="Background information"
                 />
               </div>
 
@@ -173,6 +182,7 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
                   rows={4}
                   value={editedSbar.assessment}
                   onChange={(e) => handleFieldChange('assessment', e.target.value)}
+                  aria-label="Clinical assessment"
                 />
               </div>
 
@@ -186,6 +196,7 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
                   rows={4}
                   value={editedSbar.recommendation}
                   onChange={(e) => handleFieldChange('recommendation', e.target.value)}
+                  aria-label="Recommendation"
                 />
               </div>
             </div>
@@ -193,13 +204,13 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
             {/* Critical Alerts */}
             {editedSbar.criticalAlerts.length > 0 && (
               <div>
-                <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--accent-rose)', marginBottom: '0.5rem' }}>
-                  ⚠️ Critical Safety Alerts
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--accent-danger)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <AlertTriangle size={16} /> Critical Safety Alerts
                 </h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }} role="list" aria-label="Critical safety alerts">
                   {editedSbar.criticalAlerts.map((alertText, idx) => (
-                    <div key={idx} className="alert-box">
-                      <span className="alert-icon">🚨</span>
+                    <div key={idx} className="alert-box" role="listitem">
+                      <AlertTriangle className="alert-icon" size={16} aria-hidden="true" />
                       <span className="alert-message">{alertText}</span>
                     </div>
                   ))}
@@ -210,10 +221,10 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
             {/* To Do Checklist */}
             {editedSbar.incomingTasks.length > 0 && (
               <div>
-                <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--accent-cyan)', marginBottom: '0.5rem' }}>
-                  ☑️ Incoming Nurse Checklist
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--accent-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <CheckSquare size={16} /> Incoming Nurse Checklist
                 </h4>
-                <div style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', padding: '0.75rem 1rem' }}>
+                <div style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', padding: '0.75rem 1rem' }} role="group" aria-label="Incoming nurse checklist">
                   {editedSbar.incomingTasks.map((taskText, idx) => {
                     const isChecked = taskText.startsWith('[x]');
                     const cleanText = taskText.replace(/^\[[ x]\]\s*/, '');
@@ -224,10 +235,12 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
                           checked={isChecked}
                           onChange={(e) => handleTaskCheckboxChange(idx, e.target.checked)}
                           style={{ cursor: 'pointer' }}
+                          id={`task-${idx}`}
+                          aria-label={`Task: ${cleanText}`}
                         />
-                        <span style={isChecked ? { textDecoration: 'line-through', color: 'var(--text-muted)' } : { color: '#cbd5e1' }}>
+                        <label htmlFor={`task-${idx}`} style={isChecked ? { textDecoration: 'line-through', color: 'var(--text-muted)', cursor: 'pointer' } : { color: 'var(--text-primary)', cursor: 'pointer' }}>
                           {cleanText}
-                        </span>
+                        </label>
                       </div>
                     );
                   })}
@@ -236,7 +249,7 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
             )}
 
             {/* Approval Workflow */}
-            <div style={{ borderTop: '1px solid var(--border-glass)', paddingTop: '1.25rem', marginTop: '0.5rem' }}>
+            <div className="approval-workflow" style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1.25rem', marginTop: '0.5rem' }}>
               <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
                 Handover Authorization
               </h4>
@@ -248,11 +261,13 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
                   style={{ flex: 1, height: '40px', padding: '0.5rem 0.75rem' }}
                   value={nurseSignature}
                   onChange={(e) => setNurseSignature(e.target.value)}
+                  aria-label="Nurse signature for handover authorization"
                 />
                 <button
                   className="btn btn-success"
                   onClick={handleApproveClick}
                   disabled={isApproving}
+                  aria-label={isApproving ? 'Processing handover approval' : 'Approve and complete handover'}
                 >
                   {isApproving ? 'Logging...' : 'Approve & Handover'}
                 </button>
@@ -263,14 +278,14 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
 
         {/* Handover Audit Trail */}
         {history.length > 0 && (
-          <div style={{ borderTop: '1px solid var(--border-glass)', paddingTop: '1rem', marginTop: '1rem' }}>
-            <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
-              📜 Handover Audit Trail
+          <div className="audit-trail" style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem', marginTop: '1rem' }}>
+            <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <ScrollText size={16} /> Handover Audit Trail
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }} role="list" aria-label="Handover audit trail">
               {history.map((log, idx) => (
-                <div key={idx} style={{ background: 'rgba(255,255,255,0.01)', border: '1px dashed var(--border-glass)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.75rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600, color: 'var(--accent-emerald)' }}>
+                <div key={idx} style={{ background: 'var(--bg-canvas)', border: '1px dashed var(--border-medium)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.75rem' }} role="listitem">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600, color: 'var(--accent-success)' }}>
                     <span>Approved By: RN {log.approvedBy}</span>
                     <span>{new Date(log.timestamp).toLocaleString()}</span>
                   </div>

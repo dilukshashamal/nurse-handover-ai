@@ -1,4 +1,5 @@
 import React from 'react';
+import { FileText } from 'lucide-react';
 
 export interface PatientEhrData {
   patient: {
@@ -28,9 +29,9 @@ interface PatientEhrPanelProps {
 export const PatientEhrPanel: React.FC<PatientEhrPanelProps> = ({ ehrData, isLoading }) => {
   if (isLoading) {
     return (
-      <div className="glass-panel panel-container" style={{ position: 'relative' }}>
-        <div className="spinner" style={{ margin: 'auto' }}></div>
-        <div style={{ position: 'absolute', bottom: '2rem', left: 0, right: 0, textAlign: 'center', color: 'var(--text-secondary)' }}>
+      <div className="card-panel panel-container" style={{ position: 'relative' }}>
+        <div className="spinner" style={{ margin: 'auto' }} aria-hidden="true"></div>
+        <div style={{ position: 'absolute', bottom: '2rem', left: 0, right: 0, textAlign: 'center', color: 'var(--text-secondary)' }} aria-live="polite">
           Retrieving EHR records...
         </div>
       </div>
@@ -39,8 +40,8 @@ export const PatientEhrPanel: React.FC<PatientEhrPanelProps> = ({ ehrData, isLoa
 
   if (!ehrData) {
     return (
-      <div className="glass-panel panel-container" style={{ justifyContent: 'center', alignItems: 'center', padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-        <span style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏥</span>
+      <div className="card-panel panel-container" style={{ justifyContent: 'center', alignItems: 'center', padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+        <FileText size={48} color="var(--text-muted)" style={{ marginBottom: '1rem' }} aria-hidden="true" />
         <h3>No Patient Selected</h3>
         <p style={{ fontSize: '0.9rem', marginTop: '0.5rem', color: 'var(--text-muted)' }}>
           Select a patient from the census board to display their Electronic Health Record (EHR) profile.
@@ -52,7 +53,7 @@ export const PatientEhrPanel: React.FC<PatientEhrPanelProps> = ({ ehrData, isLoa
   const { patient, conditions, allergies, vitals, labs, medications, shiftNote } = ehrData;
 
   return (
-    <div className="glass-panel panel-container">
+    <div className="card-panel panel-container">
       <div className="panel-header">
         <div>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>{patient.name}</h2>
@@ -60,18 +61,18 @@ export const PatientEhrPanel: React.FC<PatientEhrPanelProps> = ({ ehrData, isLoa
             MRN: {patient.id} &bull; DOB: {patient.birthDate} ({patient.gender}, {patient.age}yo)
           </div>
         </div>
-        <span className="badge badge-pending" style={{ background: 'rgba(0, 114, 255, 0.15)', color: 'var(--accent-cyan)', borderColor: 'rgba(0, 242, 254, 0.25)' }}>
+        <span className="badge badge-pending" style={{ background: 'var(--bg-card-active)', color: 'var(--accent-primary)', borderColor: 'var(--border-focus)' }}>
           Active EHR
         </span>
       </div>
 
       <div className="panel-body">
         {/* Vitals Section */}
-        <div>
-          <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <section aria-labelledby="vitals-heading">
+          <h3 id="vitals-heading" style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Current Vital Signs (Shift End)
           </h3>
-          <div className="vitals-grid">
+          <div className="vitals-grid" role="list" aria-label="Patient vital signs">
             {Object.entries(vitals).map(([name, value]) => {
               // Highlight out-of-range vitals slightly (e.g. high heart rate, lower SpO2)
               const isAbnormal = 
@@ -79,35 +80,35 @@ export const PatientEhrPanel: React.FC<PatientEhrPanelProps> = ({ ehrData, isLoa
                 (name.includes('Oxygen Saturation') && parseInt(value) < 95);
                 
               return (
-                <div key={name} className="vital-card" style={isAbnormal ? { borderColor: 'var(--accent-rose)', background: 'rgba(244, 63, 94, 0.05)' } : {}}>
+                <div key={name} className="vital-card" style={isAbnormal ? { borderColor: 'var(--border-danger-subtle)', background: 'var(--bg-danger-subtle)' } : {}} role="listitem">
                   <div className="vital-label">{name}</div>
-                  <div className="vital-value" style={isAbnormal ? { color: 'var(--accent-rose)' } : {}}>{value}</div>
+                  <div className="vital-value" style={isAbnormal ? { color: 'var(--accent-danger)' } : {}}>{value}</div>
                 </div>
               );
             })}
           </div>
-        </div>
+        </section>
 
         {/* Clinical Diagnostics (Conditions & Allergies) */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-          <div>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <div className="clinical-diagnostics-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <section aria-labelledby="conditions-heading">
+            <h3 id="conditions-heading" style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Active Conditions
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }} role="list" aria-label="Active medical conditions">
               {conditions.map((c, i) => (
-                <div key={i} style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-glass)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem' }}>
+                <div key={i} style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-subtle)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem' }} role="listitem">
                   {c.display}
                 </div>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <section aria-labelledby="allergies-heading">
+            <h3 id="allergies-heading" style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Allergies & Intolerances
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }} role="list" aria-label="Patient allergies and intolerances">
               {allergies.length === 0 ? (
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', padding: '0.5rem' }}>No known drug allergies</div>
               ) : (
@@ -115,79 +116,81 @@ export const PatientEhrPanel: React.FC<PatientEhrPanelProps> = ({ ehrData, isLoa
                   <div
                     key={i}
                     style={{
-                      background: a.criticality === 'high' ? 'rgba(244, 63, 94, 0.1)' : 'rgba(245, 158, 11, 0.1)',
-                      border: a.criticality === 'high' ? '1px solid rgba(244, 63, 94, 0.3)' : '1px solid rgba(245, 158, 11, 0.3)',
-                      color: a.criticality === 'high' ? 'var(--accent-rose)' : 'var(--accent-amber)',
+                      background: a.criticality === 'high' ? 'var(--bg-danger-subtle)' : 'var(--bg-warning-subtle)',
+                      border: a.criticality === 'high' ? '1px solid var(--border-danger-subtle)' : '1px solid var(--border-warning-subtle)',
+                      color: a.criticality === 'high' ? 'var(--accent-danger)' : 'var(--accent-warning)',
                       padding: '0.5rem 0.75rem',
                       borderRadius: 'var(--radius-sm)',
                       fontSize: '0.85rem',
                       fontWeight: 600
                     }}
+                    role="listitem"
+                    aria-label={`${a.substance} allergy - ${a.criticality} criticality`}
                   >
                     {a.substance} ({a.criticality.toUpperCase()})
                   </div>
                 ))
               )}
             </div>
-          </div>
+          </section>
         </div>
 
         {/* Labs & Meds */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-          <div>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <div className="labs-meds-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <section aria-labelledby="labs-heading">
+            <h3 id="labs-heading" style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Recent Laboratory Results
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }} role="list" aria-label="Recent laboratory results">
               {labs.length === 0 ? (
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', padding: '0.5rem' }}>No lab values logged this shift</div>
               ) : (
                 labs.map((l, i) => (
-                  <div key={i} style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-glass)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', display: 'flex', justifyContent: 'space-between' }}>
+                  <div key={i} style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-subtle)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', display: 'flex', justifyContent: 'space-between' }} role="listitem">
                     <span>{l.name}</span>
-                    <span style={{ color: 'var(--accent-cyan)', fontWeight: 600 }}>{l.value}</span>
+                    <span style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>{l.value}</span>
                   </div>
                 ))
               )}
             </div>
-          </div>
+          </section>
 
-          <div>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <section aria-labelledby="medications-heading">
+            <h3 id="medications-heading" style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Active Scheduled Medications
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }} role="list" aria-label="Active scheduled medications">
               {medications.map((m, i) => (
-                <div key={i} style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-glass)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem' }}>
+                <div key={i} style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-subtle)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem' }} role="listitem">
                   <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{m.name}</div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.15rem' }}>{m.instructions}</div>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         </div>
 
         {/* Unstructured Progress Note */}
-        <div>
-          <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <section aria-labelledby="shift-note-heading">
+          <h3 id="shift-note-heading" style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Outgoing Shift Progress Note (Raw)
           </h3>
           <div style={{
-            background: 'rgba(27, 36, 64, 0.4)',
-            border: '1px solid var(--border-glass)',
+            background: 'var(--bg-canvas)',
+            border: '1px solid var(--border-medium)',
             borderRadius: 'var(--radius-sm)',
             padding: '1rem',
             fontSize: '0.875rem',
             lineHeight: 1.6,
-            color: '#cbd5e1',
+            color: 'var(--text-secondary)',
             whiteSpace: 'pre-line',
             maxHeight: '220px',
             overflowY: 'auto',
             fontFamily: 'monospace'
-          }}>
+          }} role="region" aria-label="Shift progress note">
             {shiftNote.content}
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
