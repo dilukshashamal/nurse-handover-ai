@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Sparkles, AlertTriangle, AlertOctagon, CheckSquare, History } from 'lucide-react';
 
 export interface SbarContent {
   situation: string;
@@ -107,7 +108,7 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
       <div className="panel-header">
         <div>
           <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-h)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ color: 'var(--accent-cyan)' }}>⚡</span> AI-Assisted Shift Summary
+            <Sparkles size={18} style={{ color: 'var(--accent-blue)' }} /> AI-Assisted Shift Summary
           </h2>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>
             Drafting for MRN: {patientId}
@@ -123,13 +124,13 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
       <div className="panel-body">
         {!editedSbar ? (
           <div className="empty-state">
-            <span className="empty-state-icon" style={{ animation: 'pulse-glow 2s infinite alternate' }}>✨</span>
+            <Sparkles size={48} style={{ color: 'var(--accent-blue)', margin: '0 auto 1.25rem', display: 'block', animation: 'pulse-glow 2s infinite alternate' }} />
             <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--text-h)' }}>Create Shift Handoff</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.5rem', marginBottom: '1.5rem' }}>
               Compile EHR charts and generate a structured SBAR handoff report in seconds using Azure OpenAI.
             </p>
-            <button className="btn btn-primary" onClick={onGenerate}>
-              🚀 Generate SBAR Handoff
+            <button className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }} onClick={onGenerate}>
+              <Sparkles size={16} /> Generate SBAR Handoff
             </button>
           </div>
         ) : (
@@ -193,13 +194,13 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
             {/* Critical Alerts */}
             {editedSbar.criticalAlerts.length > 0 && (
               <div>
-                <h4 className="section-label" style={{ color: 'var(--accent-rose)' }}>
-                  ⚠️ Critical Safety Alerts
+                <h4 className="section-label" style={{ color: 'var(--accent-rose)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <AlertTriangle size={18} /> Critical Safety Alerts
                 </h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {editedSbar.criticalAlerts.map((alertText, idx) => (
                     <div key={idx} className="alert-box">
-                      <span className="alert-icon">🚨</span>
+                      <AlertOctagon className="alert-icon" size={16} style={{ flexShrink: 0 }} />
                       <span className="alert-message">{alertText}</span>
                     </div>
                   ))}
@@ -210,8 +211,8 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
             {/* To Do Checklist */}
             {editedSbar.incomingTasks.length > 0 && (
               <div>
-                <h4 className="section-label" style={{ color: 'var(--accent-cyan)' }}>
-                  ☑️ Incoming Nurse Checklist
+                <h4 className="section-label" style={{ color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <CheckSquare size={18} /> Incoming Nurse Checklist
                 </h4>
                 <div className="checklist-box">
                   {editedSbar.incomingTasks.map((taskText, idx) => {
@@ -262,7 +263,9 @@ export const SbarSummaryPanel: React.FC<SbarSummaryPanelProps> = ({
         {/* Handover Audit Trail */}
         {history.length > 0 && (
           <div className="audit-trail">
-            <h4 className="section-label">📜 Handover Audit Trail</h4>
+            <h4 className="section-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <History size={18} /> Handover Audit Trail
+            </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {history.map((log, idx) => (
                 <div key={idx} className="audit-item">

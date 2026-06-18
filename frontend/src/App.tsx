@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Stethoscope, RefreshCw, AlertTriangle } from 'lucide-react';
 import { PatientSelector } from './components/PatientSelector';
 import type { PatientSummary } from './components/PatientSelector';
 import { PatientEhrPanel } from './components/PatientEhrPanel';
@@ -152,21 +153,22 @@ function App() {
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <header className="app-header">
         <div className="app-title">
-          <span className="app-logo">🩺</span> Clinical Handoff Assistant
+          <Stethoscope className="app-logo-icon" size={22} style={{ color: 'var(--accent-blue)' }} /> Clinical Handoff Assistant
         </div>
         <div className="header-actions">
           <span className="header-status">
             EHR Integration: <strong>Active (Synthetic FHIR)</strong>
           </span>
-          <button className="btn btn-secondary" onClick={fetchPatients}>
-            🔄 Refresh
+          <button className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }} onClick={fetchPatients}>
+            <RefreshCw className={loadingPatients ? "spin" : ""} size={14} /> Refresh
           </button>
         </div>
       </header>
 
       {apiError && (
-        <div className="alert-banner alert-banner-danger">
-          ⚠️ {apiError}
+        <div className="alert-banner alert-banner-danger" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+          <span>{apiError}</span>
         </div>
       )}
 

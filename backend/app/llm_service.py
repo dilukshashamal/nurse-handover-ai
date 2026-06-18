@@ -148,5 +148,5 @@ def generate_sbar_summary(patient_data: Dict[str, Any]) -> Dict[str, Any]:
         return json.loads(content)
 
     except Exception as e:
-        logger.error(f"Error calling Azure OpenAI: {str(e)}. Falling back to mock data.")
-        return generate_mock_sbar(patient_id, patient_name)
+        logger.error(f"Error calling Azure OpenAI: {str(e)}.")
+        raise e

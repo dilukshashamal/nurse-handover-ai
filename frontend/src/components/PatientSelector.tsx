@@ -1,4 +1,5 @@
 import React from 'react';
+import { ClipboardList } from 'lucide-react';
 
 export interface PatientSummary {
   id: string;
@@ -27,7 +28,7 @@ export const PatientSelector: React.FC<PatientSelectorProps> = ({
   return (
     <div className="glass-panel" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 600, color: 'var(--text-h)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        <span style={{ color: 'var(--accent-cyan)' }}>📋</span> Patient Census Board
+        <ClipboardList size={18} style={{ color: 'var(--accent-blue)' }} /> Patient Census Board
       </h2>
 
       {isLoading && patients.length === 0 ? (

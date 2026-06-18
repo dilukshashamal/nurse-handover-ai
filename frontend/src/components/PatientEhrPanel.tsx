@@ -1,4 +1,5 @@
 import React from 'react';
+import { HeartPulse } from 'lucide-react';
 
 export interface PatientEhrData {
   patient: {
@@ -41,7 +42,7 @@ export const PatientEhrPanel: React.FC<PatientEhrPanelProps> = ({ ehrData, isLoa
     return (
       <div className="glass-panel panel-container" style={{ justifyContent: 'center', alignItems: 'center' }}>
         <div className="empty-state">
-          <span className="empty-state-icon">🏥</span>
+          <HeartPulse size={48} style={{ color: 'var(--text-muted)', margin: '0 auto 1.25rem', display: 'block' }} />
           <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--text-h)' }}>No Patient Selected</h3>
           <p style={{ fontSize: '0.9rem', marginTop: '0.5rem', color: 'var(--text-muted)' }}>
             Select a patient from the census board to display their Electronic Health Record (EHR) profile.
