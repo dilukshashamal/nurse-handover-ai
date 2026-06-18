@@ -6,11 +6,13 @@ import { PatientEhrPanel } from './components/PatientEhrPanel';
 import type { PatientEhrData } from './components/PatientEhrPanel';
 import { SbarSummaryPanel } from './components/SbarSummaryPanel';
 import type { SbarContent, HandoverLog } from './components/SbarSummaryPanel';
+import { HomePage } from './components/HomePage';
 
 // Read API URL from Vite env or fallback to local port 8000
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState<'home' | 'app'>('home');
   const [patients, setPatients] = useState<PatientSummary[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
 
@@ -149,11 +151,15 @@ function App() {
     }
   };
 
+  if (currentPage === 'home') {
+    return <HomePage onLaunch={() => setCurrentPage('app')} />;
+  }
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <header className="app-header">
-        <div className="app-title">
-          <Stethoscope className="app-logo-icon" size={22} style={{ color: 'var(--accent-blue)' }} /> Clinical Handoff Assistant
+        <div className="app-title" style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }} onClick={() => setCurrentPage('home')}>
+          <Stethoscope className="app-logo-icon" size={22} style={{ color: 'var(--accent-blue)' }} /> Handover
         </div>
         <div className="header-actions">
           <span className="header-status">
