@@ -125,10 +125,10 @@ resource "azurerm_linux_web_app" "backend" {
 
   site_config {
     always_on        = false # Set to true if using B1 plan or above in production
-    app_command_line = "gunicorn -w 4 -k uvicorn.workers.UvicornWorker backend.app.main:app"
+    app_command_line = "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app"
     
     application_stack {
-      python_version = "3.10"
+      python_version = "3.11"
     }
   }
 
@@ -145,6 +145,9 @@ resource "azurerm_linux_web_app" "backend" {
     
     # FHIR API integration
     "FHIR_URL"                     = "https://hwsnh${var.environment}-fhirnh${var.environment}.fhir.azurehealthcareapis.com"
+    
+    # Enable automatic build during deployment
+    "SCM_DO_BUILD_DURING_DEPLOYMENT" = "true"
   }
 }
 
@@ -159,12 +162,15 @@ resource "azurerm_linux_web_app" "frontend" {
     always_on = false
     
     application_stack {
-      node_version = "18-lts"
+      node_version = "20-lts"
     }
   }
 
   app_settings = {
     # Point the React client-side code to the Backend App Service URL
     "VITE_API_URL" = "https://${azurerm_linux_web_app.backend.default_hostname}"
+    
+    # Enable automatic build during deployment
+    "SCM_DO_BUILD_DURING_DEPLOYMENT" = "true"
   }
 }

@@ -23,3 +23,6 @@ terraform.tfvars
 Thumbs.db
 .vscode/
 .idea/
+
+backend.zip
+frontend.zip
