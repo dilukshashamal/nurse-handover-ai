@@ -132,7 +132,7 @@ resource "azurerm_linux_web_app" "backend" {
 
   app_settings = {
     "PORT"                         = "8000"
-    "AZURE_OPENAI_API_KEY"         = azurerm_cognitive_account.openai.primary_key
+    "AZURE_OPENAI_API_KEY"         = azurerm_cognitive_account.openai.primary_access_key
     "AZURE_OPENAI_ENDPOINT"        = azurerm_cognitive_account.openai.endpoint
     "AZURE_OPENAI_DEPLOYMENT_NAME" = azurerm_cognitive_deployment.gpt_model.name
     "AZURE_OPENAI_API_VERSION"     = "2024-02-15-preview"
