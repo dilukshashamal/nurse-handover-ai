@@ -13,7 +13,7 @@ variable "environment" {
 variable "location" {
   type        = string
   description = "Azure region where resources will be created. Use regions that support Azure OpenAI and FHIR services."
-  default     = "eastus"
+  default     = "eastus2"
 }
 
 variable "app_service_plan_sku" {
@@ -31,5 +31,5 @@ variable "openai_model_name" {
 variable "openai_model_version" {
   type        = string
   description = "Model version to deploy."
-  default     = "2024-05-13" # Or standard gpt-4o version
+  default     = "2024-11-20" # Or standard gpt-4o version
 }

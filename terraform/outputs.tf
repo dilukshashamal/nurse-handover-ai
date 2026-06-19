@@ -24,6 +24,6 @@ output "openai_endpoint" {
 }
 
 output "fhir_endpoint" {
-  value       = "https://fhir-${var.project_name}-${var.environment}.azurehealthcareapis.com"
+  value       = "https://hwsnh${var.environment}-fhirnh${var.environment}.fhir.azurehealthcareapis.com"
   description = "The endpoint of the FHIR API service."
 }

@@ -1,3 +1,5 @@
+data "azurerm_client_config" "current" {}
+
 # Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "rg-${var.project_name}-${var.environment}"
@@ -12,12 +14,12 @@ resource "azurerm_resource_group" "rg" {
 
 # 1. Azure OpenAI Service Account
 resource "azurerm_cognitive_account" "openai" {
-  name                  = "cog-openai-${var.project_name}-${var.environment}"
+  name                  = "cog-openai-nh-${var.environment}"
   location              = var.location
   resource_group_name   = azurerm_resource_group.rg.name
   kind                  = "OpenAI"
   sku_name              = "S0"
-  custom_subdomain_name = "cog-openai-${var.project_name}-${var.environment}"
+  custom_subdomain_name = "cog-openai-nh-${var.environment}"
   
   tags = {
     Environment = var.environment
@@ -85,23 +87,23 @@ resource "azurerm_cosmosdb_sql_container" "handover_logs" {
   partition_key_path  = "/patientId"
 }
 
-# 3. Azure Health Data Services (FHIR API)
-# Deploys a healthcare service instance for FHIR ingestion
-resource "azurerm_healthcare_service" "fhir" {
-  name                = "fhir-${var.project_name}-${var.environment}"
+# 3. Azure Health Data Services (FHIR API Workspace & Service)
+resource "azurerm_healthcare_workspace" "fhir_workspace" {
+  name                = "hwsnh${var.environment}"
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_healthcare_fhir_service" "fhir" {
+  name                = "fhirnh${var.environment}"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+  workspace_id        = azurerm_healthcare_workspace.fhir_workspace.id
   kind                = "fhir-R4"
-  
-  cosmosdb_throughput = 400
 
-  authentication_configuration {
-    authority = "https://login.microsoftonline.com/common"
-    audience  = "https://fhir-${var.project_name}-${var.environment}.azurehealthcareapis.com"
-  }
-
-  tags = {
-    Environment = var.environment
+  authentication {
+    authority = "https://login.microsoftonline.com/${data.azurerm_client_config.current.tenant_id}"
+    audience  = "https://hwsnh${var.environment}-fhirnh${var.environment}.fhir.azurehealthcareapis.com"
   }
 }
 
@@ -142,7 +144,7 @@ resource "azurerm_linux_web_app" "backend" {
     "COSMOS_KEY"                   = azurerm_cosmosdb_account.cosmos.primary_key
     
     # FHIR API integration
-    "FHIR_URL"                     = "https://fhir-${var.project_name}-${var.environment}.azurehealthcareapis.com"
+    "FHIR_URL"                     = "https://hwsnh${var.environment}-fhirnh${var.environment}.fhir.azurehealthcareapis.com"
   }
 }
 
